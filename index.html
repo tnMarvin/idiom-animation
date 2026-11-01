@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>成語小動畫</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e6ebe4;--ink:#212621;--sub:#58625a;--card:#f4f7f2;--line:#bcc6bd;--acc:#3f6b4a;--accfg:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171c18;--ink:#e7ece6;--sub:#a2ada4;--card:#212822;--line:#3a453c;--acc:#86b891;--accfg:#14201a}}
+:root[data-theme="dark"]{--bg:#171c18;--ink:#e7ece6;--sub:#a2ada4;--card:#212822;--line:#3a453c;--acc:#86b891;--accfg:#14201a}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Serif TC","PingFang TC","Microsoft JhengHei",serif;line-height:1.8;padding:20px 18px 48px}
+main{max-width:640px;margin:0 auto}
+h1{font-size:2.4rem;font-weight:900;letter-spacing:.1em;margin:8px 0 4px;line-height:1.2}
+.lead{color:var(--sub);margin:0 0 16px}
+.search{width:100%;font:inherit;font-size:1.05rem;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);min-height:48px}
+.search:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 4px}
+.chip{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px;min-height:40px}
+.chip[aria-pressed="true"]{background:var(--acc);color:var(--accfg);border-color:var(--acc)}
+.chip:focus-visible,.go:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.num{color:var(--sub);font-size:.9rem;margin:12px 0 8px}
+.list{display:grid;gap:12px;padding:0;margin:0;list-style:none}
+.item{background:var(--card);border-radius:14px;padding:16px 16px 14px;border:1px solid var(--line)}
+.item h2{margin:0;font-size:1.7rem;font-weight:900;letter-spacing:.1em;line-height:1.3}
+.zy{color:var(--sub);font-size:.9rem;margin:0 0 6px}
+.mean{margin:0 0 8px}
+.cat{display:inline-block;font-size:.85rem;color:var(--sub);margin-right:12px}
+.go{display:inline-block;color:var(--acc);font-weight:900;text-decoration:none;min-height:40px;padding:6px 0}
+.go:hover{text-decoration:underline}
+.empty{text-align:center;color:var(--sub);padding:32px 0}
+</style>
+</head>
+<body>
+<main>
+<h1>成語小動畫</h1>
+<p class="lead">輸入成語裡的字，邊打邊篩選。找不到時會改搜意思。</p>
+<input class="search" id="q" type="search" placeholder="輸入成語的字或編號，例如：竹書" aria-label="搜尋成語">
+<div class="chips" id="chips" role="group" aria-label="分類"></div>
+<p class="num" id="num" aria-live="polite"></p>
+<ul class="list" id="list"></ul>
+</main>
+
+<script src="idioms.js"></script>
+<script>
+var q=document.getElementById("q"),chips=document.getElementById("chips"),
+    list=document.getElementById("list"),num=document.getElementById("num"),cat="";
+function norm(s){return String(s).toLowerCase().replace(/\s+/g,"")}
+function hay(d){return norm([d.zhuyin,d.meaning,d.category].concat(d.keywords||[]).join(""))}
+function byNo(a,b){return (a.no==null?1e9:a.no)-(b.no==null?1e9:b.no)}
+function score(d,k){
+  if(d.no!=null&&/^\d+$/.test(k)&&String(d.no).indexOf(k)===0)return 0;
+  var s=d.idiom,p=s.indexOf(k);
+  if(p>=0)return 1+p;
+  var i=-1,first=-1,last=-1;
+  for(var j=0;j<k.length;j++){i=s.indexOf(k.charAt(j),i+1);if(i<0)return -1;if(first<0)first=i;last=i}
+  return 10+(last-first);
+}
+function chip(label,val){
+  var b=document.createElement("button");b.className="chip";b.type="button";b.textContent=label;
+  b.setAttribute("aria-pressed",cat===val);
+  b.addEventListener("click",function(){cat=val;draw()});
+  return b;
+}
+function draw(){
+  var cats=[],k=norm(q.value);
+  IDIOMS.forEach(function(d){if(cats.indexOf(d.category)<0)cats.push(d.category)});
+  chips.innerHTML="";chips.appendChild(chip("全部",""));
+  cats.forEach(function(c){chips.appendChild(chip(c,c))});
+  var pool=IDIOMS.filter(function(d){return !cat||d.category===cat}),res,fb=false;
+  if(!k){res=pool.slice().sort(byNo)}
+  else{
+    res=pool.map(function(d){return {d:d,s:score(d,k)}}).filter(function(x){return x.s>=0}).sort(function(a,b){return a.s-b.s||byNo(a.d,b.d)}).map(function(x){return x.d});
+    if(!res.length){res=pool.filter(function(d){return hay(d).indexOf(k)>=0}).sort(byNo);fb=res.length>0}
+  }
+  list.innerHTML="";
+  num.textContent="共 "+res.length+" 個成語"+(fb?"（沒有符合的成語，改用意思和關鍵字找到的結果）":"");
+  if(!res.length){
+    var e=document.createElement("li");e.className="empty";e.textContent="找不到，換個關鍵字試試。";list.appendChild(e);return;
+  }
+  res.forEach(function(d){
+    var li=document.createElement("li");li.className="item";
+    var h=document.createElement("h2");h.textContent=(d.no!=null?d.no+". ":"")+d.idiom;
+    var z=document.createElement("p");z.className="zy";z.textContent=d.zhuyin;
+    var m=document.createElement("p");m.className="mean";m.textContent=d.meaning;
+    var c=document.createElement("span");c.className="cat";c.textContent="分類："+d.category;
+    var a=document.createElement("a");a.className="go";a.href=d.file;a.textContent="開始學習 →";
+    li.appendChild(h);li.appendChild(z);li.appendChild(m);li.appendChild(c);li.appendChild(a);
+    list.appendChild(li);
+  });
+}
+q.addEventListener("input",draw);
+draw();
+</script>
+</body>
+</html>

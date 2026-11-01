@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>巴蛇吞象：貪心到想吞下大象</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e3e6f2;--ink:#1f2236;--sub:#575b78;--card:#f1f3fa;--ground:#b9bfd9;--acc:#3b4a9a;--red:#c23b2e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171a2b;--ink:#e8eaf6;--sub:#a4a9c6;--card:#20243a;--ground:#3a4064;--acc:#8d9cf0;--red:#ef6a5c}}
+:root[data-theme="dark"]{--bg:#171a2b;--ink:#e8eaf6;--sub:#a4a9c6;--card:#20243a;--ground:#3a4064;--acc:#8d9cf0;--red:#ef6a5c}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Serif TC","PingFang TC","Microsoft JhengHei",serif;line-height:1.8;padding:20px 18px 48px}
+main{max-width:560px;margin:0 auto}
+.back{display:inline-block;color:var(--sub);text-decoration:none;min-height:40px;padding:6px 0}
+.back:hover{text-decoration:underline}
+h1{font-size:2.6rem;font-weight:900;letter-spacing:.12em;margin:8px 0 4px;line-height:1.2}
+.lead{color:var(--sub);margin:0 0 14px}
+.stage{background:var(--card);border-radius:14px;padding:16px 12px 8px}
+:root{--gold:#e0b341}
+.zoo{display:flex;align-items:flex-end;justify-content:center;gap:14px;height:130px;border-bottom:4px solid var(--ground);padding-bottom:4px;position:relative}
+.sn{font-size:64px;line-height:1;transform-origin:bottom center;transition:transform .8s ease}
+.sn.fat{transform:scale(1.5,1.25)}
+.el{font-size:84px;line-height:1;transition:transform .9s ease,opacity .9s ease}
+.bone{font-size:36px;opacity:0;transition:opacity .8s ease;align-self:flex-end}
+.label{text-align:center;color:var(--sub);font-size:.9rem;margin:8px 0 2px}
+.ctrl{display:flex;gap:10px;margin:16px 0 4px}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:12px 18px;min-height:46px}
+button:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.add{flex:1;background:var(--ink);color:var(--bg);font-weight:900;font-size:1.05rem}
+.add:disabled{opacity:.35;cursor:default}
+.reset{background:transparent;color:var(--sub);border:1px solid var(--sub)}
+.say{min-height:3.6em;margin:10px 0 0;font-size:1.02rem}
+.stamp{display:none;border:3px solid var(--red);color:var(--red);font-weight:900;font-size:1.5rem;letter-spacing:.2em;padding:6px 14px;margin:8px auto 0;width:max-content;border-radius:6px;transform:rotate(-4deg)}
+.stamp.on{display:block;animation:slam .35s ease-out}
+@keyframes slam{from{transform:scale(2.2) rotate(-4deg);opacity:0}to{transform:scale(1) rotate(-4deg);opacity:1}}
+h2{font-size:1.25rem;margin:36px 0 8px}
+.parts{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;margin:0}
+.parts dt{font-weight:900;font-size:1.5rem;color:var(--acc)}
+.parts dd{margin:0}
+.q{margin:14px 0}
+.opts{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.opts button{background:var(--card);color:var(--ink);border:1px solid var(--sub)}
+.opts button.ok{background:var(--acc);color:#fff;border-color:var(--acc)}
+.opts button.no{background:var(--red);color:#fff;border-color:var(--red)}
+@media (prefers-color-scheme:dark){.opts button.ok{color:#14172a}}
+.fb{min-height:1.8em;color:var(--sub);margin:4px 0 0}
+.vbtn{background:var(--card);color:var(--ink);border:1px solid var(--sub);margin:0 0 14px}
+.vbtn[aria-pressed="true"]{background:var(--acc);color:#fff;border-color:var(--acc)}
+.pass{display:none;text-align:center;margin:24px 0 8px}
+.pass.on{display:block}
+.pstamp{display:inline-block;border:4px solid var(--red);color:var(--red);font-weight:900;font-size:2.4rem;letter-spacing:.2em;padding:6px 20px 6px 28px;border-radius:8px;transform:rotate(-6deg);animation:slam2 .5s ease-out}
+@keyframes slam2{from{transform:scale(2.4) rotate(-6deg);opacity:0}to{transform:scale(1) rotate(-6deg);opacity:1}}
+.pass p{font-weight:900;font-size:1.15rem;margin:14px 0 0}
+.leaf{position:fixed;top:-30px;font-size:24px;pointer-events:none;z-index:9;animation:leaf 2.8s linear forwards}
+@keyframes leaf{to{transform:translateY(112vh) rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<a class="back" href="index.html">← 回成語列表</a>
+<h1>巴蛇吞象</h1>
+<p class="lead">傳說中的大蛇能吞下大象。點按鈕，看看牠怎麼吞。</p>
+<button class="vbtn" id="vbtn" aria-pressed="false">🔈 開啟語音解說</button>
+
+<section class="stage" aria-label="動畫">
+  <div class="zoo"><span class="sn" id="sn" role="img" aria-label="蛇">🐍</span><span class="el" id="el" role="img" aria-label="大象">🐘</span><span class="bone" id="bone" role="img" aria-label="象骨">🦴</span></div>
+  <p class="label" id="count">第 0 / 4 步</p>
+</section>
+
+<div class="ctrl">
+  <button class="add" id="add">蛇吞一口</button>
+  <button class="reset" id="reset">重來</button>
+</div>
+<p class="say" id="say">一條大蛇，和一頭大象。</p>
+<div class="stamp" id="stamp">巴蛇吞象</div>
+
+<h2>拆開來看</h2>
+<dl class="parts">
+  <dt>巴蛇</dt><dd>傳說中能吞下大象的大蛇</dd>
+  <dt>吞象</dt><dd>把整頭大象吞下去</dd>
+</dl>
+<p>合起來：傳說巴蛇能吞下大象，後來用來比喻人心貪婪無度。</p>
+
+<h2>小測驗</h2>
+<div class="q" data-a="0" data-w="再想想，巴蛇吞象比喻人心貪婪無度，賺一點錢就想買下整條街，就是這種貪心。">
+  <div>「他才賺了一點錢，就想把整條街都買下來，真是巴蛇吞象。」這樣用對嗎？</div>
+  <div class="opts"><button data-i="0">對</button><button data-i="1">錯</button></div>
+  <div class="fb"></div>
+</div>
+<div class="q" data-a="1" data-w="再想想，傳說要過三年才吐出象骨，貪心的代價很大。">
+  <div>傳說巴蛇吞下大象後，過了多久才吐出象骨？</div>
+  <div class="opts"><button data-i="0">三天</button><button data-i="1">三年</button></div>
+  <div class="fb"></div>
+</div>
+
+<div class="pass" id="pass" aria-live="polite"><div class="pstamp">通過</div><p>好棒！你已經學會「巴蛇吞象」了。</p></div>
+</main>
+
+<script>
+var el=document.getElementById("el"),sn=document.getElementById("sn"),bone=document.getElementById("bone"),
+    cnt=document.getElementById("count"),say=document.getElementById("say"),stamp=document.getElementById("stamp"),add=document.getElementById("add"),n=0;
+var T=["巴蛇張開大嘴，咬住大象的鼻子。","大象被吞進去一半了。","整頭大象都被吞下去，蛇的肚子鼓得好大。","傳說過了三年，蛇才把象骨吐出來。這就是「巴蛇吞象」。"];
+var V=T.slice(0,3).concat(["傳說過了三年，蛇才把象骨吐出來。這就是巴蛇吞象。意思是，人心貪婪，沒有限度。"]);
+function show(){
+  el.style.opacity=1;sn.className="sn";bone.style.opacity=0;
+  el.style.transform=["","translateX(-40%) scale(.9)","translateX(-95%) scale(.55)","translateX(-150%) scale(.1)","translateX(-150%) scale(.1)"][n];
+  if(n==3){el.style.opacity=0;sn.className="sn fat"}
+  if(n==4){el.style.opacity=0;bone.style.opacity=1}
+  cnt.textContent="第 "+n+" / 4 步";
+}
+function build(){n=0;show();say.textContent="一條大蛇，和一頭大象。";stamp.classList.remove("on");add.disabled=false}
+add.addEventListener("click",function(){
+  if(n>=4)return;
+  n++;show();say.textContent=T[n-1];speak(V[n-1]);
+  if(n==4){stamp.classList.add("on");add.disabled=true}
+});
+document.getElementById("reset").addEventListener("click",function(){if(TTS)speechSynthesis.cancel();build()});
+
+var voiceOn=false,vc=null,TTS=!!window.speechSynthesis;
+function pick(){if(!TTS)return;var v=speechSynthesis.getVoices();var zh=v.filter(function(x){return /zh[-_](TW|Hant)/i.test(x.lang)});if(!zh.length)zh=v.filter(function(x){return /^zh/i.test(x.lang)});var bad=/zhiwei|danny|yunjhe|yunjie|\bmale\b|男/i,good=/meijia|mei-jia|yating|hanhan|female|女|google/i;vc=zh.filter(function(x){return good.test(x.name)&&!bad.test(x.name)})[0]||zh.filter(function(x){return !bad.test(x.name)})[0]||zh[0]||null}
+function speak(t){if(!voiceOn||!TTS)return;speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang="zh-TW";if(vc)u.voice=vc;u.rate=.9;u.pitch=1.15;speechSynthesis.speak(u)}
+if(TTS){pick();speechSynthesis.onvoiceschanged=pick}
+function confetti(){if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;for(var i=0;i<24;i++){var l=document.createElement("span");l.className="leaf";l.textContent="🍃";l.style.left=Math.random()*100+"vw";l.style.animationDelay=Math.random()+"s";document.body.appendChild(l);setTimeout(function(e){e.remove()}.bind(null,l),4500)}}
+var vbtn=document.getElementById("vbtn");
+vbtn.addEventListener("click",function(){
+  if(!TTS){say.textContent="這個畫面不支援語音，請把連結複製到 Chrome 瀏覽器開啟。";return}
+  voiceOn=!voiceOn;vbtn.setAttribute("aria-pressed",voiceOn);
+  vbtn.textContent=voiceOn?"🔊 語音解說：開":"🔈 開啟語音解說";
+  if(voiceOn){pick();speak("你好呀，今天我們來認識一個成語，巴蛇吞象。有一條大蛇和一頭大象，按下按鈕，看看會發生什麼事吧。")}else{speechSynthesis.cancel()}
+});
+document.querySelectorAll(".q").forEach(function(q){
+  q.querySelectorAll("button").forEach(function(b){
+    b.addEventListener("click",function(){
+      var ok=b.dataset.i===q.dataset.a;
+      q.querySelectorAll("button").forEach(function(x){x.classList.remove("ok","no")});
+      b.classList.add(ok?"ok":"no");
+      var m=ok?"答對了！":q.dataset.w;q.querySelector(".fb").textContent=m;
+      if(ok)q.dataset.done="1";
+      var ps=document.getElementById("pass"),all=[].every.call(document.querySelectorAll(".q"),function(x){return x.dataset.done});
+      if(ok&&all&&!ps.classList.contains("on")){ps.classList.add("on");ps.scrollIntoView({behavior:"smooth",block:"center"});confetti();speak("太棒了，兩題都答對了！你已經學會比肩繼踵，通過囉！")}else{speak(m)}
+    });
+  });
+});
+build();
+</script>
+</body>
+</html>

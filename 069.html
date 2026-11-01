@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>罄竹難書：竹子用光也寫不完</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e4eae0;--ink:#22271f;--sub:#56604f;--slip:#d8be82;--slip2:#c4a566;--bam:#5c7a3a;--bam2:#3f5a26;--red:#b3261e;--card:#f2f5ee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a211a;--ink:#e6ebdf;--sub:#a3ae9a;--slip:#b89f62;--slip2:#9c8450;--bam:#7ea04f;--bam2:#5c7a3a;--red:#e0584f;--card:#232c22}}
+:root[data-theme="dark"]{--bg:#1a211a;--ink:#e6ebdf;--sub:#a3ae9a;--slip:#b89f62;--slip2:#9c8450;--bam:#7ea04f;--bam2:#5c7a3a;--red:#e0584f;--card:#232c22}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Serif TC","PingFang TC","Microsoft JhengHei",serif;line-height:1.8;padding:20px 18px 48px}
+main{max-width:560px;margin:0 auto}
+.back{display:inline-block;color:var(--sub);text-decoration:none;min-height:40px;padding:6px 0}
+.back:hover{text-decoration:underline}
+h1{font-size:2.6rem;font-weight:900;letter-spacing:.12em;margin:8px 0 4px;line-height:1.2}
+.lead{color:var(--sub);margin:0 0 20px}
+.stage{background:var(--card);border-radius:14px;padding:14px 12px 10px}
+.forest{display:flex;gap:6px;justify-content:center;align-items:flex-end;height:150px;overflow:hidden}
+.stalk{width:16px;height:100%;background:linear-gradient(90deg,var(--bam2),var(--bam) 55%,var(--bam2));border-radius:3px;position:relative;transform-origin:bottom;transition:transform .7s ease-in,opacity .7s}
+.stalk::before,.stalk::after{content:"";position:absolute;left:-1px;right:-1px;height:4px;background:var(--bam2);border-radius:2px}
+.stalk::before{top:35%}.stalk::after{top:70%}
+.stalk.fall{transform:rotate(80deg) translateX(30px);opacity:0}
+.stalk:nth-child(3n){height:88%}.stalk:nth-child(3n+1){height:96%}
+.label{text-align:center;color:var(--sub);font-size:.9rem;margin:6px 0 0}
+.scroll{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin:14px 0 0;min-height:128px}
+.slip{width:30px;height:120px;background:var(--slip);border-radius:2px;border-bottom:3px solid var(--slip2);color:#2a2112;writing-mode:vertical-rl;font-size:.85rem;font-weight:500;text-align:center;line-height:30px;padding-top:6px;letter-spacing:.1em;animation:drop .5s ease-out}
+@keyframes drop{from{transform:translateY(-40px);opacity:0}to{transform:none;opacity:1}}
+.row{display:flex;gap:10px;margin:16px 0 4px}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:12px 18px;min-height:46px}
+button:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.write{flex:1;background:var(--ink);color:var(--bg);font-weight:900;font-size:1.05rem}
+.write:disabled{opacity:.35;cursor:default}
+.reset{background:transparent;color:var(--sub);border:1px solid var(--sub)}
+.say{min-height:3.6em;margin:10px 0 0;font-size:1.02rem}
+.stamp{display:none;border:3px solid var(--red);color:var(--red);font-weight:900;font-size:1.5rem;letter-spacing:.2em;padding:6px 14px;margin:8px auto 0;width:max-content;border-radius:6px;transform:rotate(-4deg)}
+.stamp.on{display:block;animation:slam .35s ease-out}
+@keyframes slam{from{transform:scale(2.2) rotate(-4deg);opacity:0}to{transform:scale(1) rotate(-4deg);opacity:1}}
+h2{font-size:1.25rem;margin:36px 0 8px}
+.parts{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;margin:0}
+.parts dt{font-weight:900;font-size:1.6rem;color:var(--bam2)}
+.parts dd{margin:0}
+@media (prefers-color-scheme:dark){.parts dt{color:var(--bam)}}
+.q{margin:14px 0}
+.opts{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.opts button{background:var(--card);color:var(--ink);border:1px solid var(--sub)}
+.opts button.ok{background:var(--bam);color:#fff;border-color:var(--bam)}
+.opts button.no{background:var(--red);color:#fff;border-color:var(--red)}
+.fb{min-height:1.8em;color:var(--sub);margin:4px 0 0}
+.pass{display:none;text-align:center;margin:24px 0 8px}
+.pass.on{display:block}
+.pstamp{display:inline-block;border:4px solid var(--red);color:var(--red);font-weight:900;font-size:2.4rem;letter-spacing:.2em;padding:6px 20px 6px 28px;border-radius:8px;transform:rotate(-6deg);animation:slam2 .5s ease-out}
+@keyframes slam2{from{transform:scale(2.4) rotate(-6deg);opacity:0}to{transform:scale(1) rotate(-6deg);opacity:1}}
+.pass p{font-weight:900;font-size:1.15rem;margin:14px 0 0}
+.leaf{position:fixed;top:-30px;font-size:24px;pointer-events:none;z-index:9;animation:leaf 2.8s linear forwards}
+@keyframes leaf{to{transform:translateY(112vh) rotate(360deg)}}
+.vbtn{background:var(--card);color:var(--ink);border:1px solid var(--sub);margin:0 0 14px}
+.vbtn[aria-pressed="true"]{background:var(--bam);color:#fff;border-color:var(--bam)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<a class="back" href="index.html">← 回成語列表</a>
+<h1>罄竹難書</h1>
+<p class="lead">用光了所有竹子，罪狀還是寫不完。點按鈕試試看。</p>
+<button class="vbtn" id="vbtn" aria-pressed="false">🔈 開啟語音解說</button>
+
+<section class="stage" aria-label="動畫">
+  <div class="forest" id="forest"></div>
+  <p class="label" id="left">南山的竹子：10 根</p>
+  <div class="scroll" id="scroll" aria-live="polite"></div>
+</section>
+
+<div class="row">
+  <button class="write" id="write">砍一根竹，寫一條罪狀</button>
+  <button class="reset" id="reset">重來</button>
+</div>
+<p class="say" id="say">古人把字寫在竹片（竹簡）上。</p>
+<div class="stamp" id="stamp">罄竹難書</div>
+
+<h2>拆開來看</h2>
+<dl class="parts">
+  <dt>罄</dt><dd>用盡、用光</dd>
+  <dt>竹</dt><dd>竹簡，古代的紙</dd>
+  <dt>難書</dt><dd>很難寫完</dd>
+</dl>
+<p>合起來：即使把所有竹子做成竹簡，也寫不完，比喻罪狀極多。多用在罪狀、壞事上。</p>
+
+<h2>小測驗</h2>
+<div class="q" data-a="1">
+  <div>「他熱心公益，善行罄竹難書。」這樣用對嗎？</div>
+  <div class="opts"><button data-i="0">對</button><button data-i="1">錯</button></div>
+  <div class="fb"></div>
+</div>
+<div class="q" data-a="0">
+  <div>「罄」在這裡是什麼意思？</div>
+  <div class="opts"><button data-i="0">用盡</button><button data-i="1">敲鐘</button></div>
+  <div class="fb"></div>
+</div>
+<div class="pass" id="pass" aria-live="polite"><div class="pstamp">通過</div><p>好棒！你已經學會「罄竹難書」了。</p></div>
+</main>
+
+<script>
+var voiceOn=false,vc=null,TTS=!!window.speechSynthesis;
+function pick(){if(!TTS)return;var v=speechSynthesis.getVoices();var zh=v.filter(function(x){return /zh[-_](TW|Hant)/i.test(x.lang)});if(!zh.length)zh=v.filter(function(x){return /^zh/i.test(x.lang)});var bad=/zhiwei|danny|yunjhe|yunjie|\bmale\b|男/i,good=/meijia|mei-jia|yating|hanhan|female|女|google/i;vc=zh.filter(function(x){return good.test(x.name)&&!bad.test(x.name)})[0]||zh.filter(function(x){return !bad.test(x.name)})[0]||zh[0]||null}
+function speak(t){if(!voiceOn||!TTS)return;speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang="zh-TW";if(vc)u.voice=vc;u.rate=.9;u.pitch=1.15;speechSynthesis.speak(u)}
+if(TTS){pick();speechSynthesis.onvoiceschanged=pick}
+function confetti(){if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;for(var i=0;i<24;i++){var l=document.createElement("span");l.className="leaf";l.textContent="🍃";l.style.left=Math.random()*100+"vw";l.style.animationDelay=Math.random()+"s";document.body.appendChild(l);setTimeout(function(e){e.remove()}.bind(null,l),4500)}}
+var vbtn=document.getElementById("vbtn");
+vbtn.addEventListener("click",function(){
+  if(!TTS){say.textContent="這個畫面不支援語音，請把連結複製到 Chrome 瀏覽器開啟。";return}
+  voiceOn=!voiceOn;vbtn.setAttribute("aria-pressed",voiceOn);
+  vbtn.textContent=voiceOn?"🔊 語音解說：開":"🔈 開啟語音解說";
+  if(voiceOn){pick();speak("你好呀，今天我們來認識一個成語，罄竹難書。古時候還沒有紙，人們把字寫在竹片上。按下按鈕，看看會發生什麼事吧。")}else{speechSynthesis.cancel()}
+});
+var crimes=["欺壓百姓","貪汙公款","陷害忠良","濫用刑罰","搶奪田地","說謊騙人","橫徵暴斂","縱容惡徒","破壞和平","背信棄義"];
+var forest=document.getElementById("forest"),scroll=document.getElementById("scroll"),
+    left=document.getElementById("left"),say=document.getElementById("say"),
+    stamp=document.getElementById("stamp"),wr=document.getElementById("write"),n=0;
+function build(){
+  forest.innerHTML="";scroll.innerHTML="";n=0;
+  for(var i=0;i<10;i++){var s=document.createElement("div");s.className="stalk";forest.appendChild(s)}
+  left.textContent="南山的竹子：10 根";
+  say.textContent="古人把字寫在竹片（竹簡）上。";
+  stamp.classList.remove("on");wr.disabled=false;
+}
+wr.addEventListener("click",function(){
+  if(n>=10)return;
+  forest.children[n].classList.add("fall");
+  var s=document.createElement("div");s.className="slip";s.textContent=crimes[n];scroll.appendChild(s);
+  n++;
+  left.textContent="南山的竹子："+(10-n)+" 根";
+  if(n<10){say.textContent="寫了 "+n+" 條，還有很多……";speak("第"+n+"條，"+crimes[n-1]+(n==5?"。才寫到一半，還有好多呢。":"。"))}
+  else{say.textContent="竹子用光了，罪狀卻還沒寫完。這就是「罄竹難書」。";stamp.classList.add("on");wr.disabled=true;speak("竹子全部用完了，罪狀卻還是寫不完。這就是罄竹難書。罄，是用盡的意思。竹，是竹簡。難書，就是很難寫完。要記得，這個成語多用來形容罪狀和壞事喔。")}
+});
+document.getElementById("reset").addEventListener("click",function(){if(TTS)speechSynthesis.cancel();build()});
+document.querySelectorAll(".q").forEach(function(q){
+  q.querySelectorAll("button").forEach(function(b){
+    b.addEventListener("click",function(){
+      var ok=b.dataset.i===q.dataset.a;
+      q.querySelectorAll("button").forEach(function(x){x.classList.remove("ok","no")});
+      b.classList.add(ok?"ok":"no");
+      var m=ok?"答對了！":"再想想，這個成語多用來形容罪狀、壞事，不用在好事上喔。";q.querySelector(".fb").textContent=m;
+      if(ok)q.dataset.done="1";
+      var ps=document.getElementById("pass"),all=[].every.call(document.querySelectorAll(".q"),function(x){return x.dataset.done});
+      if(ok&&all&&!ps.classList.contains("on")){ps.classList.add("on");ps.scrollIntoView({behavior:"smooth",block:"center"});confetti();speak("太棒了，兩題都答對了！你已經學會罄竹難書，通過囉！")}else{speak(m)}
+    });
+  });
+});
+build();
+</script>
+</body>
+</html>
