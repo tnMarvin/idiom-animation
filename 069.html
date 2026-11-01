@@ -58,6 +58,9 @@ h2{font-size:1.25rem;margin:36px 0 8px}
 @keyframes leaf{to{transform:translateY(112vh) rotate(360deg)}}
 .vbtn{background:var(--card);color:var(--ink);border:1px solid var(--sub);margin:0 0 14px}
 .vbtn[aria-pressed="true"]{background:var(--bam);color:#fff;border-color:var(--bam)}
+.ex{margin:10px 0 0}
+.note{color:var(--sub);font-size:.95rem;border-left:3px solid var(--ground);padding-left:12px;margin:12px 0 0}
+.vsel{display:none;margin:-6px 0 14px;font:inherit;padding:8px;border-radius:8px;border:1px solid var(--sub);background:var(--card);color:var(--ink);max-width:100%}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -67,6 +70,7 @@ h2{font-size:1.25rem;margin:36px 0 8px}
 <h1>罄竹難書</h1>
 <p class="lead">用光了所有竹子，罪狀還是寫不完。點按鈕試試看。</p>
 <button class="vbtn" id="vbtn" aria-pressed="false">🔈 開啟語音解說</button>
+<select class="vsel" id="vsel" aria-label="選擇聲音"></select>
 
 <section class="stage" aria-label="動畫">
   <div class="forest" id="forest"></div>
@@ -84,10 +88,12 @@ h2{font-size:1.25rem;margin:36px 0 8px}
 <h2>拆開來看</h2>
 <dl class="parts">
   <dt>罄</dt><dd>用盡、用光</dd>
-  <dt>竹</dt><dd>竹簡，古代的紙</dd>
+  <dt>竹</dt><dd>古代書寫用的竹簡</dd>
   <dt>難書</dt><dd>很難寫完</dd>
 </dl>
-<p>合起來：即使把所有竹子做成竹簡，也寫不完，比喻罪狀極多。多用在罪狀、壞事上。</p>
+<p>合起來：形容罪惡極多。貶義。</p>
+<p class="ex">講義例句：對日八年抗戰期間，日軍在中國所犯下的滔天罪行，真是罄竹難書。</p>
+<p class="note">教育部《成語典》補充：語或本於《呂氏春秋．季夏紀．明理》，《舊唐書．李密傳》有「罄南山之竹，書罪未窮」的說法。後遂用來比喻罪狀之多，難以寫盡。</p>
 
 <h2>小測驗</h2>
 <div class="q" data-a="1">
@@ -104,18 +110,30 @@ h2{font-size:1.25rem;margin:36px 0 8px}
 </main>
 
 <script>
-var voiceOn=false,vc=null,TTS=!!window.speechSynthesis;
-function pick(){if(!TTS)return;var v=speechSynthesis.getVoices();var zh=v.filter(function(x){return /zh[-_](TW|Hant)/i.test(x.lang)});if(!zh.length)zh=v.filter(function(x){return /^zh/i.test(x.lang)});var bad=/zhiwei|danny|yunjhe|yunjie|\bmale\b|男/i,good=/meijia|mei-jia|yating|hanhan|female|女|google/i;vc=zh.filter(function(x){return good.test(x.name)&&!bad.test(x.name)})[0]||zh.filter(function(x){return !bad.test(x.name)})[0]||zh[0]||null}
-function speak(t){if(!voiceOn||!TTS)return;speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang="zh-TW";if(vc)u.voice=vc;u.rate=.9;u.pitch=1.15;speechSynthesis.speak(u)}
+var voiceOn=false,vc=null,TTS=!!window.speechSynthesis,VK="idiomVoice";
+function zhVoices(){if(!TTS)return[];var v=speechSynthesis.getVoices();var zh=v.filter(function(x){return /zh[-_](TW|Hant)/i.test(x.lang)});if(!zh.length)zh=v.filter(function(x){return /^zh/i.test(x.lang)});return zh}
+function rank(x){var n=x.name,r=0;if(/natural|online|neural|premium|enhanced/i.test(n))r+=5;if(/google/i.test(n))r+=7;if(/hsiaochen|hsiaoyu|曉臻|曉雨|meijia|美佳|yating|雅婷|female|女/i.test(n))r+=3;if(/zhiwei|danny|yunjhe|yunjie|\bmale\b|男/i.test(n))r-=9;if(/TW|Hant/i.test(x.lang))r+=1;return r}
+function pick(){if(!TTS)return;var zh=zhVoices().sort(function(a,b){return rank(b)-rank(a)}),saved="";try{saved=localStorage.getItem(VK)||""}catch(e){}
+  vc=zh.filter(function(x){return x.name===saved})[0]||zh[0]||null;
+  var sel=document.getElementById("vsel");
+  if(sel){sel.innerHTML="";zh.forEach(function(x){var o=document.createElement("option");o.value=x.name;o.textContent=x.name;if(vc&&x.name===vc.name)o.selected=true;sel.appendChild(o)});sel.style.display=(zh.length>1&&voiceOn)?"block":"none"}
+  tip(vc)}
+function tip(v){var t=document.getElementById("vtip");if(!t){var s=document.getElementById("vsel");if(!s)return;t=document.createElement("p");t.id="vtip";t.className="label";t.style.cssText="text-align:left;margin:-6px 0 12px";s.parentNode.insertBefore(t,s.nextSibling)}
+  if(!voiceOn||!v){t.textContent="";return}
+  t.textContent="目前的聲音："+v.name+(rank(v)>=4?"":"（建議改用 Chrome，聲音會比較自然）")}
+function speak(t){if(!voiceOn||!TTS)return;speechSynthesis.cancel();
+  var ps=t.replace(/[「」『』（）()〈〉]/g,"").match(/[^。！？；]+[。！？；]?/g)||[];
+  ps.forEach(function(p){if(!p.trim())return;var u=new SpeechSynthesisUtterance(p);u.lang="zh-TW";if(vc)u.voice=vc;u.rate=.88;u.pitch=1.05;speechSynthesis.speak(u)})}
 if(TTS){pick();speechSynthesis.onvoiceschanged=pick}
 function confetti(){if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;for(var i=0;i<24;i++){var l=document.createElement("span");l.className="leaf";l.textContent="🍃";l.style.left=Math.random()*100+"vw";l.style.animationDelay=Math.random()+"s";document.body.appendChild(l);setTimeout(function(e){e.remove()}.bind(null,l),4500)}}
-var vbtn=document.getElementById("vbtn");
+var vbtn=document.getElementById("vbtn"),vsel=document.getElementById("vsel");
 vbtn.addEventListener("click",function(){
   if(!TTS){say.textContent="這個畫面不支援語音，請把連結複製到 Chrome 瀏覽器開啟。";return}
   voiceOn=!voiceOn;vbtn.setAttribute("aria-pressed",voiceOn);
   vbtn.textContent=voiceOn?"🔊 語音解說：開":"🔈 開啟語音解說";
-  if(voiceOn){pick();speak("你好呀，今天我們來認識一個成語，罄竹難書。古時候還沒有紙，人們把字寫在竹片上。按下按鈕，看看會發生什麼事吧。")}else{speechSynthesis.cancel()}
+  if(voiceOn){pick();speak("你好呀，今天我們來認識一個成語，罄竹難書。古時候還沒有紙，人們把字寫在竹片上。按下按鈕，看看會發生什麼事吧。")}else{speechSynthesis.cancel();if(vsel)vsel.style.display="none";tip(vc)}
 });
+if(vsel)vsel.addEventListener("change",function(){var n=vsel.value;vc=zhVoices().filter(function(x){return x.name===n})[0]||vc;tip(vc);try{localStorage.setItem(VK,n)}catch(e){}speak("你好，這是新選的聲音。")});
 var crimes=["欺壓百姓","貪汙公款","陷害忠良","濫用刑罰","搶奪田地","說謊騙人","橫徵暴斂","縱容惡徒","破壞和平","背信棄義"];
 var forest=document.getElementById("forest"),scroll=document.getElementById("scroll"),
     left=document.getElementById("left"),say=document.getElementById("say"),

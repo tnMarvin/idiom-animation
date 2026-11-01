@@ -56,6 +56,9 @@ h2{font-size:1.25rem;margin:36px 0 8px}
 .pass p{font-weight:900;font-size:1.15rem;margin:14px 0 0}
 .leaf{position:fixed;top:-30px;font-size:24px;pointer-events:none;z-index:9;animation:leaf 2.8s linear forwards}
 @keyframes leaf{to{transform:translateY(112vh) rotate(360deg)}}
+.ex{margin:10px 0 0}
+.note{color:var(--sub);font-size:.95rem;border-left:3px solid var(--ground);padding-left:12px;margin:12px 0 0}
+.vsel{display:none;margin:-6px 0 14px;font:inherit;padding:8px;border-radius:8px;border:1px solid var(--sub);background:var(--card);color:var(--ink);max-width:100%}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -65,6 +68,7 @@ h2{font-size:1.25rem;margin:36px 0 8px}
 <h1>比肩繼踵</h1>
 <p class="lead">人多到肩膀碰肩膀、腳跟接腳跟。點按鈕，讓街上擠滿人。</p>
 <button class="vbtn" id="vbtn" aria-pressed="false">🔈 開啟語音解說</button>
+<select class="vsel" id="vsel" aria-label="選擇聲音"></select>
 
 <section class="stage" aria-label="動畫">
   <div class="row" id="row"></div>
@@ -80,10 +84,12 @@ h2{font-size:1.25rem;margin:36px 0 8px}
 
 <h2>拆開來看</h2>
 <dl class="parts">
-  <dt>比肩</dt><dd>並排站，肩膀碰著肩膀</dd>
-  <dt>繼踵</dt><dd>一個接一個，腳跟連著腳跟</dd>
+  <dt>比</dt><dd>並（注意讀ㄅㄧˋ）</dd>
+  <dt>踵</dt><dd>腳跟</dd>
 </dl>
-<p>合起來：肩並著肩，腳接著腳，形容人多而擁擠。例如跨年晚會的人潮。</p>
+<p>合起來：形容人多擁擠，亦作「比肩接踵」。</p>
+<p class="ex">講義例句：年關接近，市場上採買年貨的人比肩繼踵，十分熱鬧。</p>
+<p class="note">教育部《成語典》補充：典出《晏子春秋．內篇．雜下》，晏嬰用「張袂成陰，揮汗成雨，比肩繼踵而在」形容齊國臨淄人多。釋義義參「摩肩接踵」，形容人多擁擠。</p>
 
 <h2>小測驗</h2>
 <div class="q" data-a="0" data-w="再想想，這個成語形容人多而擁擠，跨年晚會的人潮就符合。">
@@ -103,18 +109,30 @@ h2{font-size:1.25rem;margin:36px 0 8px}
 var MAX=12,cols=["#3b6fb0","#d28a2a","#2f9a8a","#c4607f","#6a55b8","#5a8f3a"];
 var row=document.getElementById("row"),cnt=document.getElementById("count"),say=document.getElementById("say"),
     stamp=document.getElementById("stamp"),add=document.getElementById("add"),n=0;
-var voiceOn=false,vc=null,TTS=!!window.speechSynthesis;
-function pick(){if(!TTS)return;var v=speechSynthesis.getVoices();var zh=v.filter(function(x){return /zh[-_](TW|Hant)/i.test(x.lang)});if(!zh.length)zh=v.filter(function(x){return /^zh/i.test(x.lang)});var bad=/zhiwei|danny|yunjhe|yunjie|\bmale\b|男/i,good=/meijia|mei-jia|yating|hanhan|female|女|google/i;vc=zh.filter(function(x){return good.test(x.name)&&!bad.test(x.name)})[0]||zh.filter(function(x){return !bad.test(x.name)})[0]||zh[0]||null}
-function speak(t){if(!voiceOn||!TTS)return;speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang="zh-TW";if(vc)u.voice=vc;u.rate=.9;u.pitch=1.15;speechSynthesis.speak(u)}
+var voiceOn=false,vc=null,TTS=!!window.speechSynthesis,VK="idiomVoice";
+function zhVoices(){if(!TTS)return[];var v=speechSynthesis.getVoices();var zh=v.filter(function(x){return /zh[-_](TW|Hant)/i.test(x.lang)});if(!zh.length)zh=v.filter(function(x){return /^zh/i.test(x.lang)});return zh}
+function rank(x){var n=x.name,r=0;if(/natural|online|neural|premium|enhanced/i.test(n))r+=5;if(/google/i.test(n))r+=7;if(/hsiaochen|hsiaoyu|曉臻|曉雨|meijia|美佳|yating|雅婷|female|女/i.test(n))r+=3;if(/zhiwei|danny|yunjhe|yunjie|\bmale\b|男/i.test(n))r-=9;if(/TW|Hant/i.test(x.lang))r+=1;return r}
+function pick(){if(!TTS)return;var zh=zhVoices().sort(function(a,b){return rank(b)-rank(a)}),saved="";try{saved=localStorage.getItem(VK)||""}catch(e){}
+  vc=zh.filter(function(x){return x.name===saved})[0]||zh[0]||null;
+  var sel=document.getElementById("vsel");
+  if(sel){sel.innerHTML="";zh.forEach(function(x){var o=document.createElement("option");o.value=x.name;o.textContent=x.name;if(vc&&x.name===vc.name)o.selected=true;sel.appendChild(o)});sel.style.display=(zh.length>1&&voiceOn)?"block":"none"}
+  tip(vc)}
+function tip(v){var t=document.getElementById("vtip");if(!t){var s=document.getElementById("vsel");if(!s)return;t=document.createElement("p");t.id="vtip";t.className="label";t.style.cssText="text-align:left;margin:-6px 0 12px";s.parentNode.insertBefore(t,s.nextSibling)}
+  if(!voiceOn||!v){t.textContent="";return}
+  t.textContent="目前的聲音："+v.name+(rank(v)>=4?"":"（建議改用 Chrome，聲音會比較自然）")}
+function speak(t){if(!voiceOn||!TTS)return;speechSynthesis.cancel();
+  var ps=t.replace(/[「」『』（）()〈〉]/g,"").match(/[^。！？；]+[。！？；]?/g)||[];
+  ps.forEach(function(p){if(!p.trim())return;var u=new SpeechSynthesisUtterance(p);u.lang="zh-TW";if(vc)u.voice=vc;u.rate=.88;u.pitch=1.05;speechSynthesis.speak(u)})}
 if(TTS){pick();speechSynthesis.onvoiceschanged=pick}
 function confetti(){if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;for(var i=0;i<24;i++){var l=document.createElement("span");l.className="leaf";l.textContent="🍃";l.style.left=Math.random()*100+"vw";l.style.animationDelay=Math.random()+"s";document.body.appendChild(l);setTimeout(function(e){e.remove()}.bind(null,l),4500)}}
-var vbtn=document.getElementById("vbtn");
+var vbtn=document.getElementById("vbtn"),vsel=document.getElementById("vsel");
 vbtn.addEventListener("click",function(){
   if(!TTS){say.textContent="這個畫面不支援語音，請把連結複製到 Chrome 瀏覽器開啟。";return}
   voiceOn=!voiceOn;vbtn.setAttribute("aria-pressed",voiceOn);
   vbtn.textContent=voiceOn?"🔊 語音解說：開":"🔈 開啟語音解說";
-  if(voiceOn){pick();speak("你好呀，今天我們來認識一個成語，比肩繼踵。這是一條安靜的街，按下按鈕，看看街上會變成什麼樣子吧。")}else{speechSynthesis.cancel()}
+  if(voiceOn){pick();speak("你好呀，今天我們來認識一個成語，比肩繼踵。這是一條安靜的街，按下按鈕，看看街上會變成什麼樣子吧。")}else{speechSynthesis.cancel();if(vsel)vsel.style.display="none";tip(vc)}
 });
+if(vsel)vsel.addEventListener("change",function(){var n=vsel.value;vc=zhVoices().filter(function(x){return x.name===n})[0]||vc;tip(vc);try{localStorage.setItem(VK,n)}catch(e){}speak("你好，這是新選的聲音。")});
 function layout(){
   var w=36,avail=row.clientWidth-8,ml=6;
   if(n>1){var gap=(avail-n*w)/(n-1);ml=gap>6?6:gap}
