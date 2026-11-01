@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>鴻鵠之志：天鵝的遠大志向</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e3e6f2;--ink:#1f2236;--sub:#575b78;--card:#f1f3fa;--ground:#b9bfd9;--acc:#3b4a9a;--red:#c23b2e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171a2b;--ink:#e8eaf6;--sub:#a4a9c6;--card:#20243a;--ground:#3a4064;--acc:#8d9cf0;--red:#ef6a5c}}
+:root[data-theme="dark"]{--bg:#171a2b;--ink:#e8eaf6;--sub:#a4a9c6;--card:#20243a;--ground:#3a4064;--acc:#8d9cf0;--red:#ef6a5c}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Serif TC","PingFang TC","Microsoft JhengHei",serif;line-height:1.8;padding:20px 18px 48px}
+main{max-width:560px;margin:0 auto}
+.back{display:inline-block;color:var(--sub);text-decoration:none;min-height:40px;padding:6px 0}
+.back:hover{text-decoration:underline}
+h1{font-size:2.6rem;font-weight:900;letter-spacing:.12em;margin:8px 0 4px;line-height:1.2}
+.lead{color:var(--sub);margin:0 0 14px}
+.stage{background:var(--card);border-radius:14px;padding:16px 12px 8px}
+.scene{position:relative;height:150px;border-bottom:4px solid var(--ground);display:flex;align-items:flex-end;justify-content:center;gap:14px;padding-bottom:4px}
+.u{position:relative;display:inline-flex;flex-direction:column;align-items:center}
+.a{font-size:52px;line-height:1;display:inline-block;transition:transform .8s ease,opacity .8s ease}
+.m{position:absolute;left:50%;top:-8px;margin-left:-11px;font-size:22px;opacity:0;transition:opacity .6s}
+.l{font-size:.85rem;color:var(--sub);transition:opacity .8s;margin-top:2px}
+.ov{position:absolute;left:0;top:0}
+.label{text-align:center;color:var(--sub);font-size:.9rem;margin:8px 0 2px}
+.ex{margin:10px 0 0}
+.note{color:var(--sub);font-size:.95rem;border-left:3px solid var(--ground);padding-left:12px;margin:12px 0 0}
+.ctrl{display:flex;gap:10px;margin:16px 0 4px}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:12px 18px;min-height:46px}
+button:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.add{flex:1;background:var(--ink);color:var(--bg);font-weight:900;font-size:1.05rem}
+.add:disabled{opacity:.35;cursor:default}
+.reset{background:transparent;color:var(--sub);border:1px solid var(--sub)}
+.say{min-height:3.6em;margin:10px 0 0;font-size:1.02rem}
+.stamp{display:none;border:3px solid var(--red);color:var(--red);font-weight:900;font-size:1.5rem;letter-spacing:.2em;padding:6px 14px;margin:8px auto 0;width:max-content;border-radius:6px;transform:rotate(-4deg)}
+.stamp.on{display:block;animation:slam .35s ease-out}
+@keyframes slam{from{transform:scale(2.2) rotate(-4deg);opacity:0}to{transform:scale(1) rotate(-4deg);opacity:1}}
+h2{font-size:1.25rem;margin:36px 0 8px}
+.parts{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;margin:0}
+.parts dt{font-weight:900;font-size:1.5rem;color:var(--acc)}
+.parts dd{margin:0}
+.q{margin:14px 0}
+.opts{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.opts button{background:var(--card);color:var(--ink);border:1px solid var(--sub)}
+.opts button.ok{background:var(--acc);color:#fff;border-color:var(--acc)}
+.opts button.no{background:var(--red);color:#fff;border-color:var(--red)}
+@media (prefers-color-scheme:dark){.opts button.ok{color:#14172a}}
+.fb{min-height:1.8em;color:var(--sub);margin:4px 0 0}
+.vbtn{background:var(--card);color:var(--ink);border:1px solid var(--sub);margin:0 0 14px}
+.vbtn[aria-pressed="true"]{background:var(--acc);color:#fff;border-color:var(--acc)}
+.pass{display:none;text-align:center;margin:24px 0 8px}
+.pass.on{display:block}
+.pstamp{display:inline-block;border:4px solid var(--red);color:var(--red);font-weight:900;font-size:2.4rem;letter-spacing:.2em;padding:6px 20px 6px 28px;border-radius:8px;transform:rotate(-6deg);animation:slam2 .5s ease-out}
+@keyframes slam2{from{transform:scale(2.4) rotate(-6deg);opacity:0}to{transform:scale(1) rotate(-6deg);opacity:1}}
+.pass p{font-weight:900;font-size:1.15rem;margin:14px 0 0}
+.leaf{position:fixed;top:-30px;font-size:24px;pointer-events:none;z-index:9;animation:leaf 2.8s linear forwards}
+@keyframes leaf{to{transform:translateY(112vh) rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<a class="back" href="index.html">← 回成語列表</a>
+<h1>鴻鵠之志</h1>
+<p class="lead">燕雀和天鵝，看的遠近不一樣。點按鈕聽陳涉的故事。</p>
+<button class="vbtn" id="vbtn" aria-pressed="false">🔈 開啟語音解說</button>
+
+<section class="stage" aria-label="動畫">
+<div class="scene"><span class="u"><span class="a" id="fm" style="">🧑‍🌾</span></span><span class="u"><span class="a" id="pp" style="opacity:0;font-size:40px">😆</span></span><span class="u"><span class="a" id="sp" style="opacity:0;font-size:40px">🐦</span></span><span class="u"><span class="a" id="sw" style="opacity:0">🦢</span></span></div>
+  <p class="label" id="count">第 0 / 4 步</p>
+</section>
+
+<div class="ctrl">
+  <button class="add" id="add">下一步</button>
+  <button class="reset" id="reset">重來</button>
+</div>
+<p class="say" id="say">一位在田裡工作的人。</p>
+<div class="stamp" id="stamp">鴻鵠之志</div>
+
+<h2>拆開來看</h2>
+<dl class="parts">
+  <dt>鴻鵠</dt><dd>天鵝，善高飛</dd>
+  <dt>之志</dt><dd>志向</dd>
+</dl>
+<p>合起來：形容遠大的志向。</p>
+<p class="ex">講義例句：年輕人必須有鴻鵠之志，千萬不可畫地自限，不求進取。反義：燕雀之志（度量狹小，目光短淺，無大志）。</p>
+<p class="note">教育部《成語典》補充：「鵠」在這個成語裡讀ㄏㄨˊ。釋義為像鴻鵠一舉千里般的壯志，比喻志向遠大，語出《呂氏春秋．士容論》；講義引用的《史記．陳涉世家》是其中一則書證。</p>
+
+<h2>小測驗</h2>
+<div class="q" data-a="0" data-w="再想想，鴻鵠之志是遠大的志向，鼓勵年輕人有大志向。">
+  <div>「年輕人必須有鴻鵠之志，千萬不可畫地自限。」這樣用對嗎？</div>
+  <div class="opts"><button data-i="0">對</button><button data-i="1">錯</button></div>
+  <div class="fb"></div>
+</div>
+<div class="q" data-a="1" data-w="再想想，講義說鴻鵠是天鵝，善於高飛。">
+  <div>「鴻鵠」指的是哪種動物？</div>
+  <div class="opts"><button data-i="0">麻雀</button><button data-i="1">天鵝</button></div>
+  <div class="fb"></div>
+</div>
+<div class="pass" id="pass" aria-live="polite"><div class="pstamp">通過</div><p>好棒！你已經學會「鴻鵠之志」了。</p></div>
+</main>
+
+<script>
+var ids=["fm", "pp", "sp", "sw"],els={},base={},n=0;
+ids.forEach(function(i){els[i]=document.getElementById(i);base[i]=els[i].style.cssText});
+var cnt=document.getElementById("count"),say=document.getElementById("say"),stamp=document.getElementById("stamp"),add=document.getElementById("add");
+var S=[{"t": "陳涉年輕時替人耕田，休息時嘆氣說：「如果有一天富貴了，不要忘記彼此。」", "s": {"fm": "transform:scale(1.15)"}}, {"t": "同伴笑他：「你是受雇耕田的人，哪來的富貴？」", "s": {"pp": "opacity:1"}}, {"t": "陳涉嘆息：「燕雀怎麼知道鴻鵠的志向呢？」", "s": {"sp": "opacity:1", "sw": "opacity:1;transform:translate(40px,-90px) scale(1.3)"}}, {"t": "鴻鵠是天鵝，善於高飛，用來形容遠大的志向。這就是「鴻鵠之志」。", "v": "鴻鵠是天鵝，善於高飛，用來形容遠大的志向。這就是鴻鵠之志。注意，鵠在這個成語裡讀ㄏㄨˊ。", "s": {}}];
+function show(){
+  ids.forEach(function(i){els[i].style.cssText=base[i]});
+  for(var k=0;k<n;k++){var s=S[k].s;for(var i in s){els[i].style.cssText+=";"+s[i]}}
+  cnt.textContent="第 "+n+" / "+S.length+" 步";
+}
+function build(){n=0;show();say.textContent="一位在田裡工作的人。";stamp.classList.remove("on");add.disabled=false}
+add.addEventListener("click",function(){
+  if(n>=S.length)return;
+  n++;show();say.textContent=S[n-1].t;speak(S[n-1].v||S[n-1].t);
+  if(n==S.length){stamp.classList.add("on");add.disabled=true}
+});
+document.getElementById("reset").addEventListener("click",function(){if(TTS)speechSynthesis.cancel();build()});
+
+var voiceOn=false,vc=null,TTS=!!window.speechSynthesis;
+function pick(){if(!TTS)return;var v=speechSynthesis.getVoices();var zh=v.filter(function(x){return /zh[-_](TW|Hant)/i.test(x.lang)});if(!zh.length)zh=v.filter(function(x){return /^zh/i.test(x.lang)});var bad=/zhiwei|danny|yunjhe|yunjie|\bmale\b|男/i,good=/meijia|mei-jia|yating|hanhan|female|女|google/i;vc=zh.filter(function(x){return good.test(x.name)&&!bad.test(x.name)})[0]||zh.filter(function(x){return !bad.test(x.name)})[0]||zh[0]||null}
+function speak(t){if(!voiceOn||!TTS)return;speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang="zh-TW";if(vc)u.voice=vc;u.rate=.9;u.pitch=1.15;speechSynthesis.speak(u)}
+if(TTS){pick();speechSynthesis.onvoiceschanged=pick}
+function confetti(){if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;for(var i=0;i<24;i++){var l=document.createElement("span");l.className="leaf";l.textContent="🍃";l.style.left=Math.random()*100+"vw";l.style.animationDelay=Math.random()+"s";document.body.appendChild(l);setTimeout(function(e){e.remove()}.bind(null,l),4500)}}
+var vbtn=document.getElementById("vbtn");
+vbtn.addEventListener("click",function(){
+  if(!TTS){say.textContent="這個畫面不支援語音，請把連結複製到 Chrome 瀏覽器開啟。";return}
+  voiceOn=!voiceOn;vbtn.setAttribute("aria-pressed",voiceOn);
+  vbtn.textContent=voiceOn?"🔊 語音解說：開":"🔈 開啟語音解說";
+  if(voiceOn){pick();speak("你好呀，今天我們來認識一個成語，鴻鵠之志。這是陳涉年輕時說過的一句話，按下按鈕，一起聽聽這個故事吧。")}else{speechSynthesis.cancel()}
+});
+document.querySelectorAll(".q").forEach(function(q){
+  q.querySelectorAll("button").forEach(function(b){
+    b.addEventListener("click",function(){
+      var ok=b.dataset.i===q.dataset.a;
+      q.querySelectorAll("button").forEach(function(x){x.classList.remove("ok","no")});
+      b.classList.add(ok?"ok":"no");
+      var m=ok?"答對了！":q.dataset.w;q.querySelector(".fb").textContent=m;
+      if(ok)q.dataset.done="1";
+      var ps=document.getElementById("pass"),all=[].every.call(document.querySelectorAll(".q"),function(x){return x.dataset.done});
+      if(ok&&all&&!ps.classList.contains("on")){ps.classList.add("on");ps.scrollIntoView({behavior:"smooth",block:"center"});confetti();speak("太棒了，兩題都答對了！你已經學會比肩繼踵，通過囉！")}else{speak(m)}
+    });
+  });
+});
+build();
+</script>
+</body>
+</html>
