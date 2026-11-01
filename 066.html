@@ -164,7 +164,7 @@ document.querySelectorAll(".q").forEach(function(q){
       var m=ok?"答對了！":q.dataset.w;q.querySelector(".fb").textContent=m;
       if(ok)q.dataset.done="1";
       var ps=document.getElementById("pass"),all=[].every.call(document.querySelectorAll(".q"),function(x){return x.dataset.done});
-      if(ok&&all&&!ps.classList.contains("on")){ps.classList.add("on");ps.scrollIntoView({behavior:"smooth",block:"center"});confetti();speak("太棒了，兩題都答對了！你已經學會比肩繼踵，通過囉！")}else{speak(m)}
+      if(ok&&all&&!ps.classList.contains("on")){ps.classList.add("on");ps.scrollIntoView({behavior:"smooth",block:"center"});confetti();speak("太棒了，兩題都答對了！你已經學會毛遂自薦，通過囉！")}else{speak(m)}
     });
   });
 });
