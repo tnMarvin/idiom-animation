@@ -138,7 +138,28 @@ function speak(t){if(!voiceOn||!TTS)return;speechSynthesis.cancel();
   var ps=t.replace(/[「」『』（）()〈〉]/g,"").match(/[^。！？；]+[。！？；]?/g)||[];
   ps.forEach(function(p){if(!p.trim())return;var u=new SpeechSynthesisUtterance(p);u.lang="zh-TW";if(vc)u.voice=vc;u.rate=.88;u.pitch=1.05;speechSynthesis.speak(u)})}
 if(TTS){pick();speechSynthesis.onvoiceschanged=pick}
-function confetti(){if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;for(var i=0;i<24;i++){var l=document.createElement("span");l.className="leaf";l.textContent="🍃";l.style.left=Math.random()*100+"vw";l.style.animationDelay=Math.random()+"s";document.body.appendChild(l);setTimeout(function(e){e.remove()}.bind(null,l),4500)}}
+function confetti(){
+  var rm=matchMedia("(prefers-reduced-motion:reduce)").matches,AC=window.AudioContext||window.webkitAudioContext,ac=null;
+  try{if(AC)ac=new AC()}catch(e){}
+  function noise(t,dur,type,freq,vol){if(!ac)return;var n=Math.floor(ac.sampleRate*dur),b=ac.createBuffer(1,n,ac.sampleRate),d=b.getChannelData(0);for(var i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,2);var s=ac.createBufferSource();s.buffer=b;var f=ac.createBiquadFilter();f.type=type;f.frequency.value=freq;var g=ac.createGain();g.gain.value=vol;s.connect(f);f.connect(g);g.connect(ac.destination);s.start(t)}
+  function whistle(t){if(!ac)return;var o=ac.createOscillator(),g=ac.createGain();o.type="sine";o.frequency.setValueAtTime(500,t);o.frequency.exponentialRampToValueAtTime(1400,t+.35);g.gain.setValueAtTime(.03,t);g.gain.linearRampToValueAtTime(0,t+.35);o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+.4)}
+  function boom(t){noise(t,.7,"lowpass",260,.35);for(var k=0;k<6;k++)noise(t+.08+Math.random()*.5,.05,"highpass",3000,.08)}
+  var W=innerWidth,H=innerHeight,B=[],t0=ac?ac.currentTime+.05:0;
+  for(var i=0;i<7;i++){var d=.35+i*.45+Math.random()*.15;B.push({d:d,x:W*(.15+Math.random()*.7),y:H*(.18+Math.random()*.32),done:false});whistle(t0+d-.35);boom(t0+d)}
+  if(ac)setTimeout(function(){try{ac.close()}catch(e){}},6000);
+  if(rm)return;
+  var c=document.createElement("canvas"),dpr=window.devicePixelRatio||1;c.width=W*dpr;c.height=H*dpr;
+  c.style.cssText="position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:20";
+  document.body.appendChild(c);var x=c.getContext("2d");x.scale(dpr,dpr);
+  var P=[],cols=["#ff595e","#ffca3a","#8ac926","#1982c4","#c77dff","#ff9f1c"],st=performance.now(),last=st;
+  function burst(b){var col=cols[Math.floor(Math.random()*cols.length)],col2=cols[Math.floor(Math.random()*cols.length)];for(var k=0;k<48;k++){var a=k/48*Math.PI*2+Math.random()*.1,sp=110+Math.random()*150;P.push({x:b.x,y:b.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1.3+Math.random()*.6,age:0,col:k%3?col:col2})}}
+  function loop(now){var dt=Math.min((now-last)/1000,.05),el=(now-st)/1000;last=now;x.clearRect(0,0,W,H);
+    B.forEach(function(b){if(!b.done&&el>=b.d){b.done=true;burst(b)}});
+    P=P.filter(function(p){p.age+=dt;if(p.age>=p.life)return false;p.vy+=150*dt;p.vx*=Math.pow(.35,dt);p.vy*=Math.pow(.6,dt);p.x+=p.vx*dt;p.y+=p.vy*dt;x.globalAlpha=Math.max(0,1-p.age/p.life);x.fillStyle=p.col;x.beginPath();x.arc(p.x,p.y,2.4,0,6.283);x.fill();return true});
+    x.globalAlpha=1;
+    if(el<5||P.length)requestAnimationFrame(loop);else c.remove()}
+  requestAnimationFrame(loop);
+}
 var vbtn=document.getElementById("vbtn"),vsel=document.getElementById("vsel");
 vbtn.addEventListener("click",function(){
   if(!TTS){say.textContent="這個畫面不支援語音，請把連結複製到 Chrome 瀏覽器開啟。";return}
