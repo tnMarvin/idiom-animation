@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>飲鴆止渴：只解眼前的渴</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e3e6f2;--ink:#1f2236;--sub:#575b78;--card:#f1f3fa;--ground:#b9bfd9;--acc:#3b4a9a;--red:#c23b2e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171a2b;--ink:#e8eaf6;--sub:#a4a9c6;--card:#20243a;--ground:#3a4064;--acc:#8d9cf0;--red:#ef6a5c}}
+:root[data-theme="dark"]{--bg:#171a2b;--ink:#e8eaf6;--sub:#a4a9c6;--card:#20243a;--ground:#3a4064;--acc:#8d9cf0;--red:#ef6a5c}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Serif TC","PingFang TC","Microsoft JhengHei",serif;line-height:1.8;padding:20px 18px 48px}
+main{max-width:560px;margin:0 auto}
+.back{display:inline-block;color:var(--sub);text-decoration:none;min-height:40px;padding:6px 0}
+.back:hover{text-decoration:underline}
+h1{font-size:2.6rem;font-weight:900;letter-spacing:.12em;margin:8px 0 4px;line-height:1.2}
+.lead{color:var(--sub);margin:0 0 14px}
+.stage{background:var(--card);border-radius:14px;padding:16px 12px 8px}
+.scene{position:relative;height:150px;border-bottom:4px solid var(--ground);display:flex;align-items:flex-end;justify-content:center;gap:14px;padding-bottom:4px}
+.u{position:relative;display:inline-flex;flex-direction:column;align-items:center}
+.a{font-size:52px;line-height:1;display:inline-block;transition:transform .8s ease,opacity .8s ease}
+.m{position:absolute;left:50%;top:-8px;margin-left:-11px;font-size:22px;opacity:0;transition:opacity .6s}
+.l{font-size:.85rem;color:var(--sub);transition:opacity .8s;margin-top:2px}
+.ov{position:absolute;left:0;top:0}
+.label{text-align:center;color:var(--sub);font-size:.9rem;margin:8px 0 2px}
+.ex{margin:10px 0 0}
+.note{color:var(--sub);font-size:.95rem;border-left:3px solid var(--ground);padding-left:12px;margin:12px 0 0}
+.ctrl{display:flex;gap:10px;margin:16px 0 4px}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:12px 18px;min-height:46px}
+button:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.add{flex:1;background:var(--ink);color:var(--bg);font-weight:900;font-size:1.05rem}
+.add:disabled{opacity:.35;cursor:default}
+.reset{background:transparent;color:var(--sub);border:1px solid var(--sub)}
+.say{min-height:3.6em;margin:10px 0 0;font-size:1.02rem}
+.stamp{display:none;border:3px solid var(--red);color:var(--red);font-weight:900;font-size:1.5rem;letter-spacing:.2em;padding:6px 14px;margin:8px auto 0;width:max-content;border-radius:6px;transform:rotate(-4deg)}
+.stamp.on{display:block;animation:slam .35s ease-out}
+@keyframes slam{from{transform:scale(2.2) rotate(-4deg);opacity:0}to{transform:scale(1) rotate(-4deg);opacity:1}}
+h2{font-size:1.25rem;margin:36px 0 8px}
+.parts{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline;margin:0}
+.parts dt{font-weight:900;font-size:1.5rem;color:var(--acc)}
+.parts dd{margin:0}
+.q{margin:14px 0}
+.opts{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.opts button{background:var(--card);color:var(--ink);border:1px solid var(--sub)}
+.opts button.ok{background:var(--acc);color:#fff;border-color:var(--acc)}
+.opts button.no{background:var(--red);color:#fff;border-color:var(--red)}
+@media (prefers-color-scheme:dark){.opts button.ok{color:#14172a}}
+.fb{min-height:1.8em;color:var(--sub);margin:4px 0 0}
+.vbtn{background:var(--card);color:var(--ink);border:1px solid var(--sub);margin:0 0 14px}
+.vbtn[aria-pressed="true"]{background:var(--acc);color:#fff;border-color:var(--acc)}
+.pass{display:none;text-align:center;margin:24px 0 8px}
+.pass.on{display:block}
+.pstamp{display:inline-block;border:4px solid var(--red);color:var(--red);font-weight:900;font-size:2.4rem;letter-spacing:.2em;padding:6px 20px 6px 28px;border-radius:8px;transform:rotate(-6deg);animation:slam2 .5s ease-out}
+@keyframes slam2{from{transform:scale(2.4) rotate(-6deg);opacity:0}to{transform:scale(1) rotate(-6deg);opacity:1}}
+.pass p{font-weight:900;font-size:1.15rem;margin:14px 0 0}
+.leaf{position:fixed;top:-30px;font-size:24px;pointer-events:none;z-index:9;animation:leaf 2.8s linear forwards}
+@keyframes leaf{to{transform:translateY(112vh) rotate(360deg)}}
+.vsel{display:none;margin:-6px 0 14px;font:inherit;padding:8px;border-radius:8px;border:1px solid var(--sub);background:var(--card);color:var(--ink);max-width:100%}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<a class="back" href="index.html">← 回成語列表</a>
+<h1>飲鴆止渴</h1>
+<p class="lead">一個口渴的人，旁邊有一杯毒酒。點按鈕看看。</p>
+<button class="vbtn" id="vbtn" aria-pressed="false">🔈 開啟語音解說</button>
+<select class="vsel" id="vsel" aria-label="選擇聲音"></select>
+
+<section class="stage" aria-label="動畫">
+<div class="scene"><span class="u"><span class="a" id="ps" style="font-size:60px">🥵</span></span><span class="u"><span class="a" id="cp" style="font-size:48px">🍷</span></span><span class="u"><span class="a" id="sk" style="font-size:44px;opacity:0">☠️</span></span></div>
+  <p class="label" id="count">第 0 / 3 步</p>
+</section>
+
+<div class="ctrl">
+  <button class="add" id="add">下一步</button>
+  <button class="reset" id="reset">重來</button>
+</div>
+<p class="say" id="say">一個口渴的人。</p>
+<div class="stamp" id="stamp">飲鴆止渴</div>
+
+<h2>拆開來看</h2>
+<dl class="parts">
+  <dt>鴆</dt><dd>鳥名，用其羽毛泡酒可產生劇毒</dd>
+  <dt>止渴</dt><dd>解渴</dd>
+</dl>
+<p>合起來：喝鴆酒來止渴，雖可暫時紓解苦痛，卻會帶來更嚴重的後果。比喻只求暫時紓解眼前困難，而不顧將來更大的禍患。</p>
+<p class="ex">講義近義：剜肉補瘡。講義例句：你想借高利貸來解決目前的財務危機，無異於飲鴆止渴。</p>
+
+<h2>小測驗</h2>
+<div class="q" data-a="0" data-w="再想想，飲鴆止渴是只顧暫時解決眼前困難，卻帶來更大的禍患。">
+  <div>「你想借高利貸來解決目前的財務危機，無異於飲鴆止渴。」這樣用對嗎？</div>
+  <div class="opts"><button data-i="0">對</button><button data-i="1">錯</button></div>
+  <div class="fb"></div>
+</div>
+<div class="q" data-a="0" data-w="再想想，講義說比喻只求暫時紓解眼前困難，而不顧將來更大的禍患。">
+  <div>「飲鴆止渴」比喻什麼？</div>
+  <div class="opts"><button data-i="0">只顧眼前，不顧將來的禍患</button><button data-i="1">做事很勇敢</button></div>
+  <div class="fb"></div>
+</div>
+<div class="pass" id="pass" aria-live="polite"><div class="pstamp">通過</div><p>好棒！你已經學會「飲鴆止渴」了。</p></div>
+</main>
+
+<script>
+
+var ids=["ps", "cp", "sk"],els={},base={},n=0;
+ids.forEach(function(i){els[i]=document.getElementById(i);base[i]=els[i].style.cssText});
+var cnt=document.getElementById("count"),say=document.getElementById("say"),stamp=document.getElementById("stamp"),add=document.getElementById("add");
+var S=[{"t": "他渴得很難受。", "s": {"ps": "transform:scale(1.1)"}}, {"t": "旁邊有一杯鴆酒，喝下去雖然暫時不渴了。", "s": {"cp": "transform:translateX(-26px) scale(1.2)"}}, {"t": "卻會帶來更嚴重的後果。這就是「飲鴆止渴」。", "v": "卻會帶來更嚴重的後果。這就是飲鴆止渴。鴆，念做振動的振，是一種鳥，用牠的羽毛泡酒可產生劇毒。比喻只求暫時紓解眼前困難，而不顧將來更大的禍患。", "s": {"sk": "opacity:1;transform:scale(1.5)", "ps": "opacity:.5"}}];
+function show(){
+  ids.forEach(function(i){els[i].style.cssText=base[i]});
+  for(var k=0;k<n;k++){var s=S[k].s;for(var i in s){els[i].style.cssText+=";"+s[i]}}
+  cnt.textContent="第 "+n+" / "+S.length+" 步";
+}
+function build(){n=0;show();say.textContent="一個口渴的人。";stamp.classList.remove("on");add.disabled=false}
+add.addEventListener("click",function(){
+  if(n>=S.length)return;
+  n++;show();say.textContent=S[n-1].t;speak(S[n-1].v||S[n-1].t);
+  if(n==S.length){stamp.classList.add("on");add.disabled=true}
+});
+document.getElementById("reset").addEventListener("click",function(){if(TTS)speechSynthesis.cancel();build()});
+
+var voiceOn=false,vc=null,TTS=!!window.speechSynthesis,VK="idiomVoice";
+function zhVoices(){if(!TTS)return[];var v=speechSynthesis.getVoices();var zh=v.filter(function(x){return /zh[-_](TW|Hant)/i.test(x.lang)});if(!zh.length)zh=v.filter(function(x){return /^zh/i.test(x.lang)});return zh}
+function rank(x){var n=x.name,r=0;if(/natural|online|neural|premium|enhanced/i.test(n))r+=5;if(/google/i.test(n))r+=7;if(/hsiaochen|hsiaoyu|曉臻|曉雨|meijia|美佳|yating|雅婷|female|女/i.test(n))r+=3;if(/zhiwei|danny|yunjhe|yunjie|\bmale\b|男/i.test(n))r-=9;if(/TW|Hant/i.test(x.lang))r+=1;return r}
+function pick(){if(!TTS)return;var zh=zhVoices().sort(function(a,b){return rank(b)-rank(a)}),saved="";try{saved=localStorage.getItem(VK)||""}catch(e){}
+  vc=zh.filter(function(x){return x.name===saved})[0]||zh[0]||null;
+  var sel=document.getElementById("vsel");
+  if(sel){sel.innerHTML="";zh.forEach(function(x){var o=document.createElement("option");o.value=x.name;o.textContent=x.name;if(vc&&x.name===vc.name)o.selected=true;sel.appendChild(o)});sel.style.display=(zh.length>1&&voiceOn)?"block":"none"}
+  tip(vc)}
+function tip(v){var t=document.getElementById("vtip");if(!t){var s=document.getElementById("vsel");if(!s)return;t=document.createElement("p");t.id="vtip";t.className="label";t.style.cssText="text-align:left;margin:-6px 0 12px";s.parentNode.insertBefore(t,s.nextSibling)}
+  if(!voiceOn||!v){t.textContent="";return}
+  t.textContent="目前的聲音："+v.name+(rank(v)>=4?"":"（建議改用 Chrome，聲音會比較自然）")}
+function speak(t){if(!voiceOn||!TTS)return;speechSynthesis.cancel();
+  var ps=t.replace(/[「」『』（）()〈〉]/g,"").match(/[^。！？；]+[。！？；]?/g)||[];
+  ps.forEach(function(p){if(!p.trim())return;var u=new SpeechSynthesisUtterance(p);u.lang="zh-TW";if(vc)u.voice=vc;u.rate=.88;u.pitch=1.05;speechSynthesis.speak(u)})}
+if(TTS){pick();speechSynthesis.onvoiceschanged=pick}
+function confetti(){
+  var rm=matchMedia("(prefers-reduced-motion:reduce)").matches,AC=window.AudioContext||window.webkitAudioContext,ac=null;
+  try{if(AC)ac=new AC()}catch(e){}
+  function noise(t,dur,type,freq,vol){if(!ac)return;var n=Math.floor(ac.sampleRate*dur),b=ac.createBuffer(1,n,ac.sampleRate),d=b.getChannelData(0);for(var i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,2);var s=ac.createBufferSource();s.buffer=b;var f=ac.createBiquadFilter();f.type=type;f.frequency.value=freq;var g=ac.createGain();g.gain.value=vol;s.connect(f);f.connect(g);g.connect(ac.destination);s.start(t)}
+  function whistle(t){if(!ac)return;var o=ac.createOscillator(),g=ac.createGain();o.type="sine";o.frequency.setValueAtTime(500,t);o.frequency.exponentialRampToValueAtTime(1400,t+.35);g.gain.setValueAtTime(.03,t);g.gain.linearRampToValueAtTime(0,t+.35);o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+.4)}
+  function boom(t){noise(t,.7,"lowpass",260,.35);for(var k=0;k<6;k++)noise(t+.08+Math.random()*.5,.05,"highpass",3000,.08)}
+  var W=innerWidth,H=innerHeight,B=[],t0=ac?ac.currentTime+.05:0;
+  for(var i=0;i<7;i++){var d=.35+i*.45+Math.random()*.15;B.push({d:d,x:W*(.15+Math.random()*.7),y:H*(.18+Math.random()*.32),done:false});whistle(t0+d-.35);boom(t0+d)}
+  if(ac)setTimeout(function(){try{ac.close()}catch(e){}},6000);
+  if(rm)return;
+  var c=document.createElement("canvas"),dpr=window.devicePixelRatio||1;c.width=W*dpr;c.height=H*dpr;
+  c.style.cssText="position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:20";
+  document.body.appendChild(c);var x=c.getContext("2d");x.scale(dpr,dpr);
+  var P=[],cols=["#ff595e","#ffca3a","#8ac926","#1982c4","#c77dff","#ff9f1c"],st=performance.now(),last=st;
+  function burst(b){var col=cols[Math.floor(Math.random()*cols.length)],col2=cols[Math.floor(Math.random()*cols.length)];for(var k=0;k<48;k++){var a=k/48*Math.PI*2+Math.random()*.1,sp=110+Math.random()*150;P.push({x:b.x,y:b.y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1.3+Math.random()*.6,age:0,col:k%3?col:col2})}}
+  function loop(now){var dt=Math.min((now-last)/1000,.05),el=(now-st)/1000;last=now;x.clearRect(0,0,W,H);
+    B.forEach(function(b){if(!b.done&&el>=b.d){b.done=true;burst(b)}});
+    P=P.filter(function(p){p.age+=dt;if(p.age>=p.life)return false;p.vy+=150*dt;p.vx*=Math.pow(.35,dt);p.vy*=Math.pow(.6,dt);p.x+=p.vx*dt;p.y+=p.vy*dt;x.globalAlpha=Math.max(0,1-p.age/p.life);x.fillStyle=p.col;x.beginPath();x.arc(p.x,p.y,2.4,0,6.283);x.fill();return true});
+    x.globalAlpha=1;
+    if(el<5||P.length)requestAnimationFrame(loop);else c.remove()}
+  requestAnimationFrame(loop);
+}
+var vbtn=document.getElementById("vbtn"),vsel=document.getElementById("vsel");
+vbtn.addEventListener("click",function(){
+  if(!TTS){say.textContent="這個畫面不支援語音，請把連結複製到 Chrome 瀏覽器開啟。";return}
+  voiceOn=!voiceOn;vbtn.setAttribute("aria-pressed",voiceOn);
+  vbtn.textContent=voiceOn?"🔊 語音解說：開":"🔈 開啟語音解說";
+  if(voiceOn){pick();speak("你好呀，今天我們來認識一個成語，飲鴆止渴。有一個口渴的人，按下按鈕，看看他怎麼辦吧。")}else{speechSynthesis.cancel();if(vsel)vsel.style.display="none";tip(vc)}
+});
+if(vsel)vsel.addEventListener("change",function(){var n=vsel.value;vc=zhVoices().filter(function(x){return x.name===n})[0]||vc;tip(vc);try{localStorage.setItem(VK,n)}catch(e){}speak("你好，這是新選的聲音。")});
+document.querySelectorAll(".q").forEach(function(q){
+  q.querySelectorAll("button").forEach(function(b){
+    b.addEventListener("click",function(){
+      var ok=b.dataset.i===q.dataset.a;
+      q.querySelectorAll("button").forEach(function(x){x.classList.remove("ok","no")});
+      b.classList.add(ok?"ok":"no");
+      var m=ok?"答對了！":q.dataset.w;q.querySelector(".fb").textContent=m;
+      if(ok)q.dataset.done="1";
+      var ps=document.getElementById("pass"),all=[].every.call(document.querySelectorAll(".q"),function(x){return x.dataset.done});
+      if(ok&&all&&!ps.classList.contains("on")){ps.classList.add("on");ps.scrollIntoView({behavior:"smooth",block:"center"});confetti();speak("太棒了，兩題都答對了！你已經學會飲鴆止渴，通過囉！")}else{speak(m)}
+    });
+  });
+});
+build();
+</script>
+</body>
+</html>
